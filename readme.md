@@ -1,5 +1,6 @@
 # Script bash pour mettre à jour son relevé Planète-Oui
 
+
 ## config
 
 Editez `./planete-oui.sh` et renseigner vos identifiants Planète-Oui:
@@ -12,6 +13,9 @@ Bien mettre les droits d'exécution:
 ```bash
 chmod +x ./planete-oui.sh
 ```
+
+
+## run
 
 Régulièrement mettez à jour votre relevé:
 ```bash
