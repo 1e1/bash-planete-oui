@@ -55,11 +55,13 @@ fi
 
 
 # update
-curl 'https://www.planete-oui.fr/Espace-Client/Mes-Releves' \
+STATUS=`curl 'https://www.planete-oui.fr/Espace-Client/Mes-Releves' \
   --header 'Content-Type: application/x-www-form-urlencoded' \
   --header "Cookie: PHPSESSID=$PHPSESSID" \
   --data-urlencode "date_releve=$DATE" \
   --data-urlencode "kwh_releve_hp=$AMOUNT" \
-  --include --silent
+  --include --silent \
+  | head -1`
 
+echo $STATUS
 echo "done"
