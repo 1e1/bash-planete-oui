@@ -2,12 +2,12 @@
 
 
 # config ##########################
-EMAIL="email-client@site.com"
-PASSWORD="mot-de-passe-planete-oui"
+readonly EMAIL="email-client@site.com"
+readonly PASSWORD="mot-de-passe-planete-oui"
 ###################################
 
 
-AMOUNT=$1
+readonly AMOUNT=$1
 
 if [[ ! "$1" =~ ^[0-9]+$ ]]
 then 
@@ -17,7 +17,7 @@ fi
 
 
 # authenticate
-PHPSESSID=`curl 'https://www.planete-oui.fr/Espace-Client/Connexion' \
+readonly PHPSESSID=`curl 'https://www.planete-oui.fr/Espace-Client/Connexion' \
   --header 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
   --data-urlencode "email=$EMAIL" \
   --data-urlencode "password=$PASSWORD" \
@@ -34,7 +34,7 @@ then
     CMD='date'
 fi
 
-DATE=`$CMD +%d/%m/%Y`
+readonly DATE=`$CMD +%d/%m/%Y`
 
 
 # summary
@@ -55,7 +55,7 @@ fi
 
 
 # update
-STATUS=`curl 'https://www.planete-oui.fr/Espace-Client/Mes-Releves' \
+readonly STATUS=`curl 'https://www.planete-oui.fr/Espace-Client/Mes-Releves' \
   --header 'Content-Type: application/x-www-form-urlencoded' \
   --header "Cookie: PHPSESSID=$PHPSESSID" \
   --data-urlencode "date_releve=$DATE" \
