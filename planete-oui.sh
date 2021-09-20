@@ -16,15 +16,20 @@ then
 fi
 
 
+# cookies storage
+readonly COOKIEJAR=$(mktemp /tmp/po_cookies.XXXXXX)
+
+
 # authenticate
-readonly PHPSESSID=`curl 'https://www.planete-oui.fr/Espace-Client/Connexion' \
+curl 'https://www.planete-oui.fr/Espace-Client/Connexion' \
+  --request POST \
   --header 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
   --data-urlencode "email=$EMAIL" \
   --data-urlencode "password=$PASSWORD" \
-  --data-urlencode "from_ajax=1" \
-  --include --silent \
-  | awk '/^Set-Cookie:/ { print $2 }' \
-  | sed 's/PHPSESSID=\([^;]*\);/\1/'`
+  --cookie-jar $COOKIEJAR \
+  --include \
+  --silent \
+  > /dev/null
 
 
 # fix Mac OS date
@@ -38,7 +43,6 @@ readonly DATE=`$CMD +%d/%m/%Y`
 
 
 # summary
-echo "cookie: $PHPSESSID"
 echo "email:  $EMAIL"
 echo "date:   $DATE"
 echo "kwh:    $AMOUNT"
@@ -56,12 +60,20 @@ fi
 
 # update
 readonly STATUS=`curl 'https://www.planete-oui.fr/Espace-Client/Mes-Releves' \
+  --request POST \
   --header 'Content-Type: application/x-www-form-urlencoded' \
-  --header "Cookie: PHPSESSID=$PHPSESSID" \
   --data-urlencode "date_releve=$DATE" \
   --data-urlencode "kwh_releve_hp=$AMOUNT" \
-  --include --silent \
+  --cookie $COOKIEJAR \
+  --include \
+  --silent \
   | head -1`
 
 echo $STATUS
+
+
+rm -f $COOKIEJAR
+
+
 echo "done"
+
